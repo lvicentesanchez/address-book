@@ -4,14 +4,39 @@ import org.specs2.Spec
 
 class GenderSpec extends Spec {
   def is = s2"""
-    Gender should
 
-      return None if string doesn't contain the word 'female', with any combination of uppercase/lowercase letters   $notValidFemaleString
-      return Some(Female) if string contains the word 'female', with any combination of uppercase/lowercase letters' $validFemaleString
+    ordering should
+    
+      return -1 if genderA < genderB (lexicographically)                                                            $lowerThan
+      return  0 if genderA = genderB (lexicographically)                                                            $equalTo
+      return  1 if genderA > genderB (lexicographically)                                                            $greaterThan
+           
+    unapply should
 
-      return None if string doesn't contain the word 'male', with any combination of uppercase/lowercase letters     $notValidMaleString
-      return Some(Male) if string contains the word 'male', with any combination of uppercase/lowercase letters'     $validMaleString
+      return None if string doesn't contain the word 'female', with any combination of uppercase/lowercase letters  $notValidFemaleString
+      return Some(Female) if string contains the word 'female', with any combination of uppercase/lowercase letters $validFemaleString
+
+      return None if string doesn't contain the word 'male', with any combination of uppercase/lowercase letters    $notValidMaleString
+      return Some(Male) if string contains the word 'male', with any combination of uppercase/lowercase letters     $validMaleString
   """
+
+  def equalTo = {
+    val genderA: Gender = Female
+    val genderB: Gender = Female
+    Ordering[Gender].compare(genderA, genderB) must_== 0
+  }
+
+  def greaterThan = {
+    val genderA: Gender = Male
+    val genderB: Gender = Female
+    Ordering[Gender].compare(genderA, genderB) must_== 1
+  }
+
+  def lowerThan = {
+    val genderA: Gender = Female
+    val genderB: Gender = Male
+    Ordering[Gender].compare(genderA, genderB) must_== -1
+  }
 
   def notValidFemaleString = {
     val string: String = "orange"
