@@ -19,8 +19,8 @@ class DateOfBirthSpec extends Spec {
   }
 
   def validDateString = {
-    val string: String = "01/12/1937"
+    val string: String = "01/12/15"
     val gender: Option[DateOfBirth] = DateOfBirth.unapply(string)
-    gender must beSome(LocalDate.of(1937, 12, 1))
+    gender must beSome(DateOfBirth(LocalDate.of(1915, 12, 1)))
   }
 }
