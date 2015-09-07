@@ -3,7 +3,7 @@ package io.github.lvicentesanchez.addressbook.model
 import scala.util.control.Exception._
 
 case class Person(name: Name, gender: Gender, dob: DateOfBirth) {
-  override val toString: String = s"$name, $gender, $dob"
+  override val toString: String = s""""$name, $gender, $dob""""
 }
 
 object Person extends PersonInstances {
