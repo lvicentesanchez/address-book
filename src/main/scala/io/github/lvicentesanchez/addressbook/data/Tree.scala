@@ -89,16 +89,13 @@ object Tree {
 
   def values[A](tree: Tree[A]): List[A] = {
 
-    def go(rest: Tree[A]): List[A] = rest match {
+    def go(rest: Tree[A]): Iterator[A] = rest match {
 
-      case Leaf =>
-        Nil
-
-      case branch: Branch[A] =>
-        go(branch.left) ++ List(branch.value) ++ go(branch.right)
+      case Leaf => Iterator()
+      case branch: Branch[A] => go(branch.left) ++ Iterator(branch.value) ++ go(branch.right)
     }
 
-    go(tree)
+    go(tree).to[List]
   }
 
   def findFirst[A](f: A => Boolean, tree: Tree[A]): Option[A] = tree match {
