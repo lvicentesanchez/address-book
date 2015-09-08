@@ -1,7 +1,7 @@
 package io.github.lvicentesanchez.addressbook
 
 import io.github.lvicentesanchez.addressbook.data.{ Leaf, Tree }
-import io.github.lvicentesanchez.addressbook.data.tree._
+import io.github.lvicentesanchez.addressbook.data.syntax.tree._
 import io.github.lvicentesanchez.addressbook.model._
 import java.time.temporal.{ ChronoUnit, Temporal }
 import java.time.LocalDate
