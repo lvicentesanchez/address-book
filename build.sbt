@@ -69,7 +69,6 @@ val formatting =
     .setPreference(MultilineScaladocCommentsStartOnFirstLine, false)
     .setPreference(PlaceScaladocAsterisksBeneathSecondAsterisk, false)
     .setPreference(PreserveSpaceBeforeArguments, false)
-    .setPreference(PreserveDanglingCloseParenthesis, true)
     .setPreference(RewriteArrowSymbols, false)
     .setPreference(SpaceBeforeColon, false)
     .setPreference(SpaceInsideBrackets, false)
@@ -77,7 +76,6 @@ val formatting =
     .setPreference(SpacesWithinPatternBinders, true)
 
 val pluginsSettings =
-  net.virtualvoid.sbt.graph.Plugin.graphSettings ++
   scalariformSettings
 
 val settings = Seq(
