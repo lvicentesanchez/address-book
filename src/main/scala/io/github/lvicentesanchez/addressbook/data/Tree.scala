@@ -34,26 +34,26 @@ object Tree {
       case other => other
     }
 
-    def balanceLeft(color: Color, x: A, left: Tree[A], right: Tree[A]): Tree[A] = (color, left, right) match {
+    def balanceLeft(color: Color, z: A, l: Tree[A], d: Tree[A]): Tree[A] = l match {
 
-      case (Black, Branch(y, Red, Branch(z, Red, lll, llr), lr), r) =>
-        Branch(y, Red, Branch(z, Black, lll, llr), Branch(x, Black, lr, r))
+      case Branch(y, Red, Branch(x, Red, a, b), c) =>
+        Branch(y, Red, Branch(x, Black, a, b), Branch(z, Black, c, d))
 
-      case (Black, Branch(z, Red, ll, Branch(y, Red, lrl, lrr)), r) =>
-        Branch(y, Red, Branch(z, Black, ll, lrl), Branch(x, Black, lrr, r))
+      case Branch(x, Red, a, Branch(y, Red, b, c)) =>
+        Branch(y, Red, Branch(x, Black, a, b), Branch(z, Black, c, d))
 
-      case _ => Branch(x, color, left, right)
+      case _ => Branch(z, color, l, d)
     }
 
-    def balanceRight(color: Color, x: A, left: Tree[A], right: Tree[A]): Tree[A] = (color, left, right) match {
+    def balanceRight(color: Color, x: A, a: Tree[A], r: Tree[A]): Tree[A] = r match {
 
-      case (Black, l, Branch(y, Red, rl, Branch(z, Red, rrl, rrr))) =>
-        Branch(y, Red, Branch(x, Black, l, rl), Branch(z, Black, rrl, rrr))
+      case Branch(z, Red, Branch(y, Red, b, c), d) =>
+        Branch(y, Red, Branch(x, Black, a, b), Branch(z, Black, c, d))
 
-      case (Black, l, Branch(z, Red, Branch(y, Red, rll, rlr), rr)) =>
-        Branch(y, Red, Branch(x, Black, l, rll), Branch(z, Black, rlr, rr))
+      case Branch(y, Red, b, Branch(z, Red, c, d)) =>
+        Branch(y, Red, Branch(x, Black, a, b), Branch(z, Black, c, d))
 
-      case _ => Branch(x, color, left, right)
+      case _ => Branch(x, color, a, r)
     }
 
     balanceAdd(element, tree) match {
@@ -61,6 +61,11 @@ object Tree {
       case Leaf => Leaf
       case Branch(value, _, left, right) => Branch(value, Black, left, right)
     }
+  }
+
+  def height[A](tree: Tree[A]): Int = tree match {
+    case Leaf => 0
+    case Branch(_, _, left, right) => 1 + math.max(height(left), height(right))
   }
 
   def fold[A, B](value: A, tree: Tree[B])(f: (A, B) => A): A =
@@ -84,21 +89,16 @@ object Tree {
 
   def values[A](tree: Tree[A]): List[A] = {
 
-    @annotation.tailrec
-    def go(acc: List[A], rest: List[Tree[A]]): List[A] = rest match {
+    def go(rest: Tree[A]): List[A] = rest match {
 
-      case Leaf :: tail =>
-        go(acc, tail.asInstanceOf[List[Tree[A]]])
+      case Leaf =>
+        Nil
 
-      case head :: tail =>
-        val headCasted = head.asInstanceOf[Branch[A]]
-        val tailCasted = tail.asInstanceOf[List[Tree[A]]]
-        go(headCasted.value :: acc, headCasted.right :: headCasted.left :: tailCasted)
-
-      case Nil => acc
+      case branch: Branch[A] =>
+        go(branch.left) ++ List(branch.value) ++ go(branch.right)
     }
 
-    go(List(), List(tree))
+    go(tree)
   }
 
   def findFirst[A](f: A => Boolean, tree: Tree[A]): Option[A] = tree match {
